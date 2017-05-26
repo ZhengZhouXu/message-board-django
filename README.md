@@ -33,7 +33,7 @@ import pymysql
 pymysql.install_as_MySQLdb()
 ```
 * 然后执行
-> python manage.py makemigration  
+> python manage.py makemigrations  
 python manage.py migrate
 
 6. 配置静态文件夹
@@ -43,6 +43,56 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 ```
+
+7. 创建数据库model
+* 7.1 进入创建的app的文件夹，找到models
+* 7.2 写入例如以下格式的model
+``` python
+class UserMessage(models.Model):
+    name = models.CharField(max_length=20, verbose_name='用户名')
+    email = models.EmailField(verbose_name='邮箱')
+    address = models.CharField(max_length=100, verbose_name='联系地址')
+    message = models.CharField(max_length=500, verbose_name='用户留言')
+
+    class Meta:
+        verbose_name = '用户留言信息'
+```
+model对应的类型有：
+```python
+models.CharField # 字符
+models.ForeignKey # 外键
+models.DateTimeField # 日期
+models.IntegerField # 整型
+models.EmailField # 邮箱
+models.IPAddressFiled # ip类型
+models.FileFiled # 文件
+models.ImageField # 图片
+
+# 赋值字符类型时必须指定
+max_length = 20
+# 是否可为空
+null = True
+# 是否能空白
+blank = True
+# 默认值
+default = ''
+# 指定主键
+primary_key=True
+
+# meta信息
+# 指定表名
+db_table = '表名'
+# 默认排序,前面叫负号是倒序
+ordering = '-字段名'
+```
+* 7.3 进入settings.py 修改 INSTALLED_APPS
+``` python
+INSTALLED_APPS = [
+    # ... 自带的一些内容
+    'message'
+]
+```
+* 7.4 执行第5步，记得后面加新添加的app名
 
 <hr/>
 
